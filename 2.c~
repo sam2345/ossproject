@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <string.h>
+#include<stdlib.h>
+void encrypt(char msg[],int key[])
+{
+    int i,j;
+    for(j=0;j<3;j++)
+   {
+    for(i=0;i<strlen(msg);++i)
+    {     if(msg[i]==' ')
+           {
+		
+	   }
+	  else
+                msg[i] = msg[i] - key[j];
+    }
+   printf("After %d Round-Encrypted Message : %s\n",j+1,msg);
+   }
+   
+}
+
+void decrypt(char msg[],int key[])
+{
+    int i,j;
+   for(j=2;j>=0;j--)
+   {
+    for(i=0;i<strlen(msg);++i)
+    {
+	   if(msg[i]==' ')
+           {
+		
+	   }
+	   else
+          	msg[i] = msg[i] + key[j];
+    }
+  printf("After %d Round-decrypted Message : %s\n",j-1,msg);
+   }
+}
+int main()
+{
+     char msg[1024];
+     int key[3];
+     int j;
+     printf("\nWrite message you want to send:");
+     gets(msg);
+     
+     printf("\n Sent Message : %s",msg);
+     printf("\nEnter Secret Key:");
+     for(j=0;j<3;j++)
+     {
+     scanf("%d",&key[j]);
+     }
+     encrypt(msg,key);
+     printf("\nEncrypted value : %s\n",msg);    
+     decrypt(msg,key);
+     printf("\nDecrypted value : %s\n",msg);
+     printf("\n Received Message : %s\n",msg);
+     return 0;
+}

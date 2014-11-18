@@ -1,0 +1,11 @@
+<?php
+
+session_start();
+
+echo"Fruit=".$_SESSION['fruit'];
+echo"Color=".$_SESSION['color'];
+echo"Test="$_SESSION['Test'];
+
+echo"<a href="first.php"></a>";
+
+?>

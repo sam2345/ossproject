@@ -1,0 +1,163 @@
+## Setting The wireless Channels..
+
+set val(chan)           Channel/WirelessChannel    ;# channel type
+set val(prop)           Propagation/TwoRayGround   ;# radio-propagation model
+set val(netif)          Phy/WirelessPhy            ;# network interface type
+set val(mac)            Mac/802_11                 ;# MAC type
+set val(ifq)            Queue/DropTail/PriQueue    ;# interface queue type
+set val(ll)             LL                         ;# link layer type
+set val(ant)            Antenna/OmniAntenna        ;# antenna model
+set val(ifqlen)         5                          ;# max packet in ifq
+set val(nn)             6                           ;# number of mobilenodes
+set val(rp)             DSR                        ;# routing protocol
+set val(x)              750                        ;# X dimension of topography
+set val(y)              550                        ;# Y dimension of topography 
+set val(stop)         18.0                       ;# time of simulation end
+
+## Create a simulator object(nothing but, a scheduler's object)..
+      set ns [new Simulator]
+
+## Create a trace file and nam file..
+      set tracefd [open wireless1.tr w]
+      set namtrace [open wireless1.nam w]   
+
+## Trace the nam and trace details from the main simulation..
+      $ns trace-all $tracefd
+      $ns namtrace-all-wireless $namtrace $val(x) $val(y)
+
+## set up topography object..
+      set topo [new Topography]
+
+      $topo load_flatgrid $val(x) $val(y)
+
+      set god_ [create-god $val(nn)]
+
+## Color Descriptions..
+      $ns color 1 dodgerblue
+      $ns color 2 blue
+      $ns color 3 cyan
+      $ns color 4 green
+      $ns color 5 yellow
+      $ns color 6 black
+      $ns color 7 magenta
+      $ns color 8 gold
+      $ns color 9 red
+     
+# Setting The Distance Variables..
+# For model 'TwoRayGround'
+      set dist(5m)  7.69113e-06
+      set dist(9m)  2.37381e-06
+      set dist(10m) 1.92278e-06
+      set dist(11m) 1.58908e-06
+      set dist(12m) 1.33527e-06
+      set dist(13m) 1.13774e-06
+      set dist(14m) 9.81011e-07
+      set dist(15m) 8.54570e-07
+      set dist(16m) 7.51087e-07
+      set dist(20m) 4.80696e-07
+      set dist(25m) 3.07645e-07
+      set dist(30m) 2.13643e-07
+      set dist(35m) 1.56962e-07
+      set dist(40m) 1.56962e-10
+      set dist(45m) 1.56962e-11
+      set dist(50m) 1.20174e-13
+      #Phy/WirelessPhy set CSThresh_ $dist(50m)
+      #Phy/WirelessPhy set RXThresh_ $dist(50m)
+
+## Setting node config event with set of inputs..
+      puts "Node Configuration Started here...\n \
+                   -channel $val(chan) \n \
+                   -adhocRouting $val(rp) \n \
+                   -llType $val(ll) \n \
+                   -macType $val(mac) \n \
+                   -ifqType $val(ifq) \n \
+                   -ifqLen $val(ifqlen) \n \
+                   -antType $val(ant) \n \
+                   -propType $val(prop) \n \
+                   -phyType $val(netif) \n"
+                      
+
+        $ns node-config -adhocRouting $val(rp) \
+                   -llType $val(ll) \
+                   -macType $val(mac) \
+                   -ifqType $val(ifq) \
+                   -ifqLen $val(ifqlen) \
+                   -antType $val(ant) \
+                   -propType $val(prop) \
+                   -phyType $val(netif) \
+                   -channelType $val(chan) \
+                   -topoInstance $topo \
+                   -agentTrace ON \
+                   -routerTrace ON \
+                   -macTrace OFF \
+                   -movementTrace ON
+# Energy model
+      $ns node-config  -energyModel EnergyModel \
+                        -initialEnergy 20 \
+                        -txPower 0.9 \
+                        -rxPower 0.8 \
+                        -idlePower 0.0 \
+                        -sensePower 0.0175
+
+## Creating node objects..               
+      for {set i 0} {$i < $val(nn) } { incr i } {
+            set node_($i) [$ns node]     
+      }
+
+for {set i 0} {$i < $val(nn)} {incr i} {
+      $node_($i) color darkgreen
+      $ns at 0.0 "$node_($i) color darkgreen"
+      }
+
+## Provide initial location of mobilenodes..
+           
+      if {$val(nn) >0} {
+            for {set i 1} {$i < $val(nn) } { incr i } {
+                  set xx [expr rand()*600]                 
+                  set yy [expr rand()*500];
+                  $node_($i) set X_ $xx
+                  $node_($i) set Y_ $yy
+            }
+      }
+
+## set god distance..
+      $god_ set-dist 0 1 2
+      $god_ set-dist 0 2 2
+      $god_ set-dist 0 3 2
+      $god_ set-dist 0 4 1
+      $god_ set-dist 0 5 2
+      $god_ set-dist 1 2 3
+      $god_ set-dist 1 3 3
+     
+
+## Define node initial position in nam..
+      for {set i 0} {$i < $val(nn)} { incr i } {
+      # 30 defines the node size for nam..
+            $ns initial_node_pos $node_($i) 30
+      }
+
+## Telling nodes when the simulation ends..
+for {set i 0} {$i < $val(nn) } { incr i } {
+    $ns at $val(stop) "$node_($i) reset";
+}
+
+## Ending nam and the simulation..
+$ns at $val(stop) "$ns nam-end-wireless $val(stop)"
+$ns at $val(stop) "stop"
+$ns at 16.01 "puts \"end simulation\" " ;# $ns halt
+
+ 
+
+## Stop procedure..
+
+proc stop {} {
+    global ns tracefd namtrace
+    $ns flush-trace
+    close $tracefd
+    close $namtrace
+
+    exec nam wireless1.nam &
+    exit 0
+}
+
+$ns run

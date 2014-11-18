@@ -1,0 +1,61 @@
+BEGIN {
+
+
+recv=0;
+recv1=0;
+recv2=0;
+recv3=0;
+total=0;
+gotime = 10;
+time = 0;
+a=0;
+packet_size = 500;
+time_interval=0.005;
+}
+
+{
+      
+ event = $1
+  time = $2
+  snode = $3
+ rport = $10
+ rnode = $4
+ sport=$7
+
+
+if (( event == "+") && ( snode == 0 ) && ( rport == 1073741824.0 ))
+{
+send1++;
+}
+
+if (( event == "r") && ( rnode == 5 ) && ( snode == 4) && ( rport == 1073741824.0 ))
+{
+recv1++;
+}
+if (( event == "r") && ( rnode == 6 ) && ( snode == 4) && ( rport == 1073741824.0 ))
+{
+recv2++;
+}
+if (( event == "r") && ( rnode == 7 ) && ( snode == 3) && ( rport == 1073741824.0 ))
+{
+recv3++;
+}
+
+total=recv1+recv2+recv3;
+
+  }    
+
+
+END {
+
+printf("packets send at n0=%d\n",send1)
+printf("packets received at n5=%d\n",recv1)
+printf("packets received at n6=%d\n",recv2)
+printf("packets received at n7=%d\n",recv3)
+
+printf("packets received =%d\n",total)
+
+
+
+}
+

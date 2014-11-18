@@ -1,0 +1,368 @@
+#===================================
+#     Simulation parameters setup
+#===================================
+set val(stop)   10.0                         ;# time of simulation end
+
+
+
+
+
+#===================================
+#        Initialization        
+#===================================
+#Create a ns simulator
+
+set ns [new Simulator]
+
+#give color to packets
+
+$ns color 1 Yellow
+$ns color 2 Green
+
+
+#Open the NS trace file
+
+set tracefile [open out.tr w]
+$ns trace-all $tracefile
+
+#Open the NAM trace file
+
+set namfile [open out.nam w]
+$ns namtrace-all $namfile
+
+#===================================
+#        Nodes Definition        
+#===================================
+#Create 22 nodes
+
+set SourceNode [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+set n3 [$ns node]
+set n4 [$ns node]
+set n5 [$ns node]
+set n6 [$ns node]
+set n7 [$ns node]
+set n8 [$ns node]
+set n9 [$ns node]
+set n10 [$ns node]
+set n11 [$ns node]
+set n12 [$ns node]
+set n13 [$ns node]
+set n14 [$ns node]
+set n15 [$ns node]
+set n17 [$ns node]
+set n18 [$ns node]
+set DestinationNode [$ns node]
+set n20 [$ns node]
+set n21 [$ns node]
+set n22 [$ns node]
+
+
+#node color
+
+$SourceNode color Blue
+$DestinationNode color Red
+$ns at 0.0 "$SourceNode label Source"
+$ns at 0.0 "$DestinationNode label Destination"
+
+
+
+#===================================
+#        Links Definition        
+#===================================
+
+#Createlinks between nodes
+
+$ns duplex-link $SourceNode $n1 50.0Mb 10ms DropTail
+$ns queue-limit $SourceNode $n1 30
+$ns duplex-link $SourceNode $n7 100.0Mb 10ms DropTail
+$ns queue-limit $SourceNode $n7 10
+$ns duplex-link $SourceNode $n8 60.0Mb 10ms DropTail
+$ns queue-limit $SourceNode $n8 5
+$ns duplex-link $SourceNode $n2 95.0Mb 10ms DropTail
+$ns queue-limit $SourceNode $n2 35
+$ns duplex-link $n3 $SourceNode 90.0Mb 10ms DropTail
+$ns queue-limit $n3 $SourceNode 25
+$ns duplex-link $n4 $SourceNode 80.0Mb 10ms DropTail
+$ns queue-limit $n4 $SourceNode 50
+$ns duplex-link $n5 $SourceNode 120.0Mb 10ms DropTail
+$ns queue-limit $n5 $SourceNode 60
+$ns duplex-link $SourceNode $n6 35.0Mb 10ms DropTail
+$ns queue-limit $SourceNode $n6 15
+$ns duplex-link $n8 $n9 100.0Mb 10ms DropTail
+$ns queue-limit $n8 $n9 40
+$ns duplex-link $n9 $n10 68.0Mb 10ms DropTail
+$ns queue-limit $n9 $n10 36
+$ns duplex-link $n10 $n11 89.0Mb 10ms DropTail
+$ns queue-limit $n10 $n11 46
+$ns duplex-link $n11 $n12 100.0Mb 10ms DropTail
+$ns queue-limit $n11 $n12 20
+$ns duplex-link $n12 $n13 100.0Mb 10ms DropTail
+$ns queue-limit $n12 $n13 20
+$ns duplex-link $n13 $n14 69.0Mb 10ms DropTail
+$ns queue-limit $n13 $n14 29
+$ns duplex-link $n14 $n15 100.0Mb 10ms DropTail
+$ns queue-limit $n14 $n15 20
+$ns duplex-link $n15 $DestinationNode 90.0Mb 10ms DropTail
+$ns queue-limit $n15 $DestinationNode 35
+$ns duplex-link $DestinationNode $n18 35.0Mb 10ms DropTail
+$ns queue-limit $DestinationNode $n18 16
+$ns duplex-link $n18 $n17 75.0Mb 10ms DropTail
+$ns queue-limit $n18 $n17 60
+$ns duplex-link $n17 $n12 100.0Mb 10ms DropTail
+$ns queue-limit $n17 $n12 38
+$ns duplex-link $n22 $n11 83.0Mb 10ms DropTail
+$ns queue-limit $n22 $n11 56
+$ns duplex-link $n10 $n21 100.0Mb 10ms DropTail
+$ns queue-limit $n10 $n21 49
+$ns duplex-link $n9 $n20 94.0Mb 10ms DropTail
+$ns queue-limit $n9 $n20 36
+
+#Give node position (for NAM)
+
+$ns duplex-link-op $SourceNode $n1 orient right-up
+$ns duplex-link-op $SourceNode $n7 orient right-up
+$ns duplex-link-op $SourceNode $n8 orient right
+$ns duplex-link-op $SourceNode $n2 orient left-up
+$ns duplex-link-op $n3 $SourceNode orient right-down
+$ns duplex-link-op $n4 $SourceNode orient right-up
+$ns duplex-link-op $n5 $SourceNode orient right-up
+$ns duplex-link-op $SourceNode $n6 orient right-down
+$ns duplex-link-op $n8 $n9 orient right
+$ns duplex-link-op $n9 $n10 orient right
+$ns duplex-link-op $n10 $n11 orient right
+$ns duplex-link-op $n11 $n12 orient right
+$ns duplex-link-op $n12 $n13 orient right-up
+$ns duplex-link-op $n13 $n14 orient right-up
+$ns duplex-link-op $n14 $n15 orient right-down
+$ns duplex-link-op $n15 $DestinationNode orient left-down
+$ns duplex-link-op $DestinationNode $n18 orient left-down
+$ns duplex-link-op $n18 $n17 orient left-up
+$ns duplex-link-op $n17 $n12 orient left-up
+$ns duplex-link-op $n22 $n11 orient left-up
+$ns duplex-link-op $n10 $n21 orient left-down
+$ns duplex-link-op $n9 $n20 orient left-up
+
+#===================================
+#        Agents Definition        
+#===================================
+#Setup a TCP connection
+
+set tcp0 [new Agent/TCP]
+
+$ns attach-agent $SourceNode $tcp0
+set sink14 [new Agent/TCPSink]
+$ns attach-agent $n1 $sink14
+$ns connect $tcp0 $sink14
+$tcp0 set packetSize_ 500
+$tcp0 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp3 [new Agent/TCP]
+$ns attach-agent $SourceNode $tcp3
+set sink15 [new Agent/TCPSink]
+$ns attach-agent $n7 $sink15
+$ns connect $tcp3 $sink15
+$tcp3 set packetSize_ 1000
+$tcp3 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp4 [new Agent/TCP]
+$ns attach-agent $SourceNode $tcp4
+set sink23 [new Agent/TCPSink]
+$ns attach-agent $DestinationNode $sink23
+$ns connect $tcp4 $sink23
+$tcp4 set packetSize_ 4000
+$tcp4 set fid_ 2
+
+#Setup a TCP connection
+
+set tcp5 [new Agent/TCP]
+$ns attach-agent $SourceNode $tcp5
+set sink16 [new Agent/TCPSink]
+$ns attach-agent $n6 $sink16
+$ns connect $tcp5 $sink16
+$tcp5 set packetSize_ 1300
+$tcp5 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp6 [new Agent/TCP]
+$ns attach-agent $SourceNode $tcp6
+set sink17 [new Agent/TCPSink]
+$ns attach-agent $n5 $sink17
+$ns connect $tcp6 $sink17
+$tcp6 set packetSize_ 1350
+$tcp6 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp7 [new Agent/TCP]
+$ns attach-agent $SourceNode $tcp7
+set sink18 [new Agent/TCPSink]
+$ns attach-agent $n4 $sink18
+$ns connect $tcp7 $sink18
+$tcp7 set packetSize_ 950
+$tcp7 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp8 [new Agent/TCP]
+$ns attach-agent $SourceNode $tcp8
+set sink19 [new Agent/TCPSink]
+$ns attach-agent $n3 $sink19
+$ns connect $tcp8 $sink19
+$tcp8 set packetSize_ 780
+$tcp8 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp9 [new Agent/TCP]
+$ns attach-agent $SourceNode $tcp9
+set sink13 [new Agent/TCPSink]
+$ns attach-agent $n2 $sink13
+$ns connect $tcp9 $sink13
+$tcp9 set packetSize_ 600
+$tcp9 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp10 [new Agent/TCP]
+$ns attach-agent $n9 $tcp10
+set sink20 [new Agent/TCPSink]
+$ns attach-agent $n20 $sink20
+$ns connect $tcp10 $sink20
+$tcp10 set packetSize_ 1400
+$tcp10 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp11 [new Agent/TCP]
+$ns attach-agent $n10 $tcp11
+set sink21 [new Agent/TCPSink]
+$ns attach-agent $n21 $sink21
+$ns connect $tcp11 $sink21
+$tcp11 set packetSize_ 1409
+$tcp11 set fid_ 1
+
+#Setup a TCP connection
+
+set tcp12 [new Agent/TCP]
+$ns attach-agent $n11 $tcp12
+set sink22 [new Agent/TCPSink]
+$ns attach-agent $n22 $sink22
+$ns connect $tcp12 $sink22
+$tcp12 set packetSize_ 450
+$tcp12 set fid_ 1
+
+
+#===================================
+#        Applications Definition        
+#===================================
+#Setup a FTP Application over TCP connection
+
+set ftp0 [new Application/FTP]
+$ftp0 attach-agent $tcp9
+$ns at 1.3 "$ftp0 start"
+$ns at 5.7 "$ftp0 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp1 [new Application/FTP]
+$ftp1 attach-agent $tcp0
+$ns at 1.25 "$ftp1 start"
+$ns at 5.0 "$ftp1 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp2 [new Application/FTP]
+$ftp2 attach-agent $tcp3
+$ns at 1.6 "$ftp2 start"
+$ns at 6.1 "$ftp2 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp3 [new Application/FTP]
+$ftp3 attach-agent $tcp4
+$ns at 1.11 "$ftp3 start"
+$ns at 5.88 "$ftp3 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp4 [new Application/FTP]
+$ftp4 attach-agent $tcp5
+$ns at 0.95 "$ftp4 start"
+$ns at 7.0 "$ftp4 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp5 [new Application/FTP]
+$ftp5 attach-agent $tcp6
+$ns at 1.4 "$ftp5 start"
+$ns at 6.0 "$ftp5 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp6 [new Application/FTP]
+$ftp6 attach-agent $tcp7
+$ns at 1.0 "$ftp6 start"
+$ns at 6.0 "$ftp6 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp7 [new Application/FTP]
+$ftp7 attach-agent $tcp8
+$ns at 1.0 "$ftp7 start"
+$ns at 6.0 "$ftp7 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp8 [new Application/FTP]
+$ftp8 attach-agent $tcp10
+$ns at 1.0 "$ftp8 start"
+$ns at 6.0 "$ftp8 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp9 [new Application/FTP]
+$ftp9 attach-agent $tcp11
+$ns at 1.0 "$ftp9 start"
+$ns at 6.0 "$ftp9 stop"
+
+#Setup a FTP Application over TCP connection
+
+set ftp10 [new Application/FTP]
+$ftp10 attach-agent $tcp12
+$ns at 1.06 "$ftp10 start"
+$ns at 5.8 "$ftp10 stop"
+
+
+#link failure
+
+$ns rtmodel-at 2.0 down $n10 $n11
+$ns rtmodel-at 2.86 up $n10 $n11
+
+# Routing Protocol
+
+$ns rtproto DV
+
+#===================================
+#        Termination        
+#===================================
+#Define a 'finish' procedure
+
+proc finish {} {
+    global ns tracefile namfile
+    $ns flush-tracesd
+    close $tracefile
+    close $namfile
+    exec nam out.nam &
+    exit 0
+}
+$ns at $val(stop) "$ns nam-end-wireless $val(stop)"
+$ns at $val(stop) "finish"
+$ns at $val(stop) "puts \"done\" ; $ns halt"
+$ns run

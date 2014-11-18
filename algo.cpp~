@@ -1,0 +1,50 @@
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+#include<String>
+class Cryptography
+{
+	int key;
+	String message;
+	public:
+	void encrypt();
+	void decrypt();
+}
+void Cryptography::encrypt()
+{
+	cout<<"Write message you want to send!!";
+	cin>>message;
+	len=strlen(message);
+	cout<<"Enter key";
+	cin>>key;	
+	for(int i=0;i<len;i++)
+	{
+	  message[i]=message[i]+key;
+	}
+	cout<<"Encrypted message:"<<message;
+}
+
+void Cryptography::decrypt()
+{
+	cout<<"Received messsage";
+	cin>>message;	
+	for(int i=0;i<len;i++)
+	{
+	  message[i]=message[i]-key;
+	}
+	cout<<"Original message:"<<message;
+}
+
+public class Cryptdemo
+{
+    public static void main(String args[])
+      {
+	Cryptography c=new Cryptography();
+	c.encrypt();
+	c.decrypt();
+      }
+
+
+}
+
+

@@ -1,0 +1,27 @@
+#include<stdio.h>
+int main()
+{
+	omp_set_num_threads(4);
+	long int nn=100000;
+	int i,id;
+	double x;
+	float st,p=0.0,sum=0.0,pi[4];
+	st=(1.0/n);
+#pragma omp parallel private(i,id,x,sum)
+{ 
+        id=omp_get_thread_num();
+	for(int i=id,i<n;i=i+4)
+	{
+	   x=(i+0.5)*st;
+	   sum=sum+(4/1+(x*x)));
+	}
+	pi[id]=sum*st;
+}
+for(i=0;i<4;i++)
+{  
+   p=p+pi[i];
+   }
+printf("\n pi %f",p);
+return 0;
+}
+	

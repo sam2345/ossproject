@@ -1,0 +1,36 @@
+#include"stdio.h"
+int main()
+{
+	int n=9;
+	int i,j,m;
+	for(i=1;i<=4;i++)
+	{     
+		for(j=4-i;j>0;j--)
+		{
+			printf(" ");
+		}
+		for(m=i;m>0;m--)
+		{
+			
+			printf("*%d",n--);
+			
+		}
+		printf("\n");
+		}
+			
+		for(i=4;i>=0;i--)
+		{static int p=4;
+		for(j=4-i;j>=0;j--)
+		{
+			printf(" ");
+		}
+		for(m=i-1;m>0;m--)
+		{
+			printf("*%d",p);
+			p++;
+		}
+		printf("\n");	
+	
+	}
+	return 0;
+}

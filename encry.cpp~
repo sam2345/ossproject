@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <string.h>
+#include<stdlib.h>
+ 
+void encrypt( *msg,int key)
+{
+    unsigned int i;
+    for(i=0;i<strlen(msg);++i)
+    {
+        msg[i] = msg[i] - key;
+    }
+}
+ 
+void decrypt(char msg[],int key)
+{
+    unsigned int i;
+    for(i=0;i<strlen(msg);++i)
+    {
+        msg[i] = msg[i] + key;
+    }
+}
+int main()
+{
+    String *msg ;
+    printf("Enter the message: \n ");
+    scanf("%s",msg);
+    printf("Passwrod     = %s\n",msg);
+    encrypt(msg,0xFACA);
+    printf("Encrypted value = %s\n",msg);
+    decrypt(msg,0xFACA);
+    printf("Decrypted value = %s\n",msg);
+    return 0;
+}

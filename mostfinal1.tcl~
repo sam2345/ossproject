@@ -1,0 +1,243 @@
+# This script is created by NSG2 beta1
+# <http://wushoupong.googlepages.com/nsg>
+
+#===================================
+#     Simulation parameters setup
+#===================================
+set val(chan)   Channel/WirelessChannel    ;# channel type
+set val(prop)   Propagation/TwoRayGround   ;# radio-propagation model
+set val(netif)  Phy/WirelessPhy            ;# network interface type
+set val(mac)    Mac/802_11                 ;# MAC type
+set val(ifq)    CMUPriQueue    ;# interface queue type
+set val(ll)     LL                         ;# link layer type
+set val(ant)    Antenna/OmniAntenna        ;# antenna model
+set val(ifqlen) 150                         ;# max packet in ifq
+set val(nn)     13                         ;# number of mobilenodes
+set val(rp)     DSR                       ;# routing protocol
+set val(x)      1213                      ;# X dimension of topography
+set val(y)      800                      ;# Y dimension of topography
+set val(stop)   20.0                         ;# time of simulation end
+
+#===================================
+#        Initialization        
+#===================================
+#Create a ns simulator
+set ns [new Simulator]
+
+#Setup topography object
+set topo       [new Topography]
+$topo load_flatgrid $val(x) $val(y)
+create-god $val(nn)
+
+#Open the NS trace file
+set tracefile [open out111.tr w]
+$ns trace-all $tracefile
+
+#Open the NAM trace file
+set namfile [open out111.nam w]
+$ns namtrace-all $namfile
+$ns namtrace-all-wireless $namfile $val(x) $val(y)
+set chan [new $val(chan)];#Create wireless channel
+
+#===================================
+#     Mobile node parameter setup
+#===================================
+$ns node-config -adhocRouting  $val(rp) \
+                -llType        $val(ll) \
+                -macType       $val(mac) \
+                -ifqType       $val(ifq) \
+                -ifqLen        $val(ifqlen) \
+                -antType       $val(ant) \
+                -propType      $val(prop) \
+                -phyType       $val(netif) \
+                -channel       $chan \
+                -topoInstance  $topo \
+                -agentTrace    ON \
+                -routerTrace   ON \
+                -macTrace      ON \
+                -movementTrace ON
+
+#===================================
+#        Nodes Definition        
+#===================================
+#Create 13 nodes
+set n0 [$ns node]
+$n0 set X_ 100
+$n0 set Y_ 500
+$n0 set Z_ 0.0
+$ns initial_node_pos $n0 40
+set n1 [$ns node]
+$n1 set X_ 482
+$n1 set Y_ 243
+$n1 set Z_ 0.0
+$ns initial_node_pos $n1 40
+set n2 [$ns node]
+$n2 set X_ 801
+$n2 set Y_ 419
+$n2 set Z_ 0.0
+$ns initial_node_pos $n2 40
+set n3 [$ns node]
+$n3 set X_ 963
+$n3 set Y_ 171
+$n3 set Z_ 0.0
+$ns initial_node_pos $n3 40
+set n4 [$ns node]
+$n4 set X_ 1113
+$n4 set Y_ 408
+$n4 set Z_ 0.0
+$ns initial_node_pos $n4 40
+set n5 [$ns node]
+$n5 set X_ 766
+$n5 set Y_ 538
+$n5 set Z_ 0.0
+$ns initial_node_pos $n5 40
+set n6 [$ns node]
+$n6 set X_ 552
+$n6 set Y_ 519
+$n6 set Z_ 0.0
+$ns initial_node_pos $n6 40
+set n7 [$ns node]
+$n7 set X_ 276
+$n7 set Y_ 220
+$n7 set Z_ 0.0
+$ns initial_node_pos $n7 40
+set n8 [$ns node]
+$n8 set X_ 654
+$n8 set Y_ 87
+$n8 set Z_ 0.0
+$ns initial_node_pos $n8 40
+set n9 [$ns node]
+$n9 set X_ 976
+$n9 set Y_ 536
+$n9 set Z_ 0.0
+$ns initial_node_pos $n9 40
+set n10 [$ns node]
+$n10 set X_ 422
+$n10 set Y_ 507
+$n10 set Z_ 0.0
+$ns initial_node_pos $n10 40
+set n11 [$ns node]
+$n11 set X_ 615
+$n11 set Y_ 265
+$n11 set Z_ 0.0
+$ns initial_node_pos $n11 40
+set n12 [$ns node]
+$n12 set X_ 615
+$n12 set Y_ 800
+$n12 set Z_ 0.0
+$ns initial_node_pos $n12 40
+
+
+$ns at 0.0 "$n0 add-mark m1 blue square"
+$ns at 0.0 "$n1 add-mark m1 green circle"
+$ns at 0.0 "$n2 add-mark m1 green circle"
+$ns at 0.0 "$n9 add-mark m1 green circle"
+$ns at 0.0 "$n4 add-mark m1 green circle"
+$ns at 0.0 "$n5 add-mark m1 green circle"
+$ns at 0.0 "$n6 add-mark m1 green circle"
+$ns at 0.0 "$n7 add-mark m1 green circle"
+$ns at 0.0 "$n8 add-mark m1 green circle"
+$ns at 0.0 "$n10 add-mark m1 green circle"
+$ns at 0.0 "$n11 add-mark m1 green circle"
+$ns at 0.0 "$n12 add-mark m1 green circle"
+$ns at 0.0 "$n3 add-mark m1 blue square"
+
+#===================================
+#        Generate movement          
+#===================================
+$ns at 1 " $n0 setdest 1000 300 20 " 
+$ns at 7 " $n0 setdest 600 200 30 " 
+
+$ns at 6.2 " $n2 setdest 700 300 30 " 
+$ns at 15 " $n2 setdest 200 200 30 " 
+$ns at 12 " $n0 setdest 800 450 35 " 
+$ns at 1 " $n1 setdest 100 400 10 " 
+$ns at 1 " $n3 setdest 400 700 30 " 
+$ns at 16 " $n3 setdest 1000 200 60 " 
+$ns at 1 " $n4 setdest 600 200 30 " 
+$ns at 15 " $n4 setdest 800 100 10 " 
+$ns at 1 " $n5 setdest 300 500 40 " 
+$ns at 1 " $n6 setdest 660 380 20 " 
+$ns at 17 " $n6 setdest 300 200 20 " 
+
+$ns at 8.5 " $n6 setdest 450 300 30 "
+$ns at 8.5 " $n6 setdest 450 300 30 "
+
+$ns at 1 " $n7 setdest 250 350 45 " 
+$ns at 1 " $n8 setdest 700 250 20 " 
+$ns at 3.0 " $n8 setdest 650 300 20 " 
+$ns at 7.28 " $n8 setdest 500 280 20 "
+$ns at 11 " $n9 setdest 400 700 35 " 
+
+$ns at 5.8 " $n9 setdest 450 550 90 " 
+
+ 
+$ns at 1 " $n10 setdest 470 475 15 " 
+$ns at 7.2 " $n10 setdest 800 600 35 " 
+$ns at 2 " $n11 setdest 700 700 35 " 
+$ns at 4.8 " $n11 setdest 630 300 15 " 
+$ns at 17 " $n11 setdest 700 100 35 " 
+$ns at 2 " $n12 setdest 100 500 70 " 
+
+#===================================
+#        Agents Definition        
+#===================================
+#Setup a TCP connection
+set tcp0 [new Agent/TCP]
+$ns attach-agent $n0 $tcp0
+set sink1 [new Agent/TCPSink]
+$ns attach-agent $n3 $sink1
+$ns connect $tcp0 $sink1
+$tcp0 set packetSize_ 2500
+
+
+#===================================
+#        Applications Definition        
+#===================================
+#Setup a FTP Application over TCP connection
+set ftp0 [new Application/FTP]
+$ftp0 attach-agent $tcp0
+$ns at 1.0 "$ftp0 start"
+$ns at 20.0 "$ftp0 stop"
+
+
+proc record {} {
+global sink1 f0
+set ns [Simulator instance]
+set time 0.5
+set bw0 [$sink1 set bytes_]
+
+set now [$ns now]
+puts $f0 "$now [expr $bw0/$time*8/1000]"
+
+$sink1 set bytes_ 0
+
+$ns at [expr $now+$time] "record"
+}
+
+
+#===================================
+#        Termination        
+#===================================
+#Define a 'finish' procedure
+proc finish {} {
+    global ns tracefile namfile
+
+	  exec nam out.nam &
+    global f0
+    close $f0
+    $ns flush-trace
+    close $tracefile
+    close $namfile
+	 
+    exec nam out111.nam &
+	 exec xgraph out111.tr -geometry 800x400 &
+    exit 0
+}
+for {set i 0} {$i < $val(nn) } { incr i } {
+    $ns at $val(stop) "\$n$i reset"
+}
+$ns at $val(stop) "$ns nam-end-wireless $val(stop)"
+$ns at $val(stop) "finish"
+$ns at $val(stop) "puts \"done\" ; $ns halt"
+$ns run

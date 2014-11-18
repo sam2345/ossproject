@@ -1,0 +1,14 @@
+<?php
+
+session_start();
+
+echo"Welcome";
+
+$_SESSION['fruit']=$_Post['fruit'];
+$_SESSION['color']=$_['color'];
+$_SESSION['test']=$_['test'];
+$_SESSION['time']     = time();
+
+echo '<br /><a href="second.php?' . SID . '">Go to</a>';
+
+?>

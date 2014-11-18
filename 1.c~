@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <string.h>
+void encrypt(char msg[],int key)
+{
+    int i;
+    for(i=0;i<strlen(msg);++i)
+    {
+          msg[i] = msg[i] - key;
+    }
+}
+
+void decrypt(char msg[],int key)
+{
+    unsigned int i;
+    for(i=0;i<strlen(msg);++i)
+    {
+          msg[i] = msg[i] + key;
+    }
+}
+int main()
+{
+     char msg[1024];
+     int key;
+     
+     printf("\nWrite message you wat to send:");
+     gets(msg);
+     printf("\nEnter Secret Key:");
+     scanf("%d",&key);
+     encrypt(msg,key);
+     printf("\nEncrypted value = %s\n",msg);    
+     decrypt(msg,key);
+     printf("\nDecrypted value = %s\n",msg);
+     return 0;
+}
